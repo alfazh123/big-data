@@ -1,6 +1,8 @@
 from kafka import KafkaProducer
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
 
 TOPIC_NAME = 'my_favorite_topic'
@@ -8,7 +10,8 @@ KAFKA_SERVER = 'localhost:9092'
 
 producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
-api_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=PBCRF&outputsize=full&apikey=RFCAWUNTMSJWR1UJ'
+load_dotenv()
+api_url = os.getenv("ALPHA_API_KEY")
 
 
 def get_feedback():
@@ -33,6 +36,3 @@ else:
   print("No feedback data retrieved")
 
 producer.flush()
-
-# producer.send(TOPIC_NAME, b'${"name": "John Doe", "age": 30}')
-# producer.flush()

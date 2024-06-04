@@ -2,6 +2,8 @@ from kafka import KafkaConsumer
 import json
 import psycopg2
 from psycopg2 import Error
+import os
+from dotenv import load_dotenv
 
 TOPIC_NAME = 'my_favorite_topic'
 consumer = KafkaConsumer(TOPIC_NAME)
@@ -10,11 +12,13 @@ for msg in consumer:
     print(json.loads(msg.value))
     # data = json.loads(msg.value)
     try:
+        load_dotenv()
+        
         connection = psycopg2.connect(
-            user="postgres",
-            password="adekkoko",
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD"),
             host="127.0.0.1",
-            database="postgres"
+            database=os.getenv("POSTGRES_DB_NAME")
         )
         
         cursor = connection.cursor()
